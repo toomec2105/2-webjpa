@@ -1,18 +1,13 @@
 package com.tomek.web_jpa_2.user;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Collections;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,16 +34,15 @@ public class UserControllerIntegrationNoServerTest {
 
 	@Autowired
 	private ObjectMapper objectMapper;
-
-	private String user1;
-	private String user2;
+	private User user1 = new User("apKaisa5@gmail.com", "purpleStack", "ADMIN", "Kaisa Stronks");
+	private User user2 = new User("YassQRAQAE@gmail.com", "Ctr7QAQAQAA", "USER", "Yasuo Wind");
+	private String user1AsJson = asJsonString(user1);
+	private String user2AsJson = asJsonString(user2);
 
 	@BeforeEach
 	public void setup() {
-		user1 = asJsonString(new User("apKaisa5@gmail.com", "purpleStack", "ADMIN", "Kaisa Stronks"));
-		user2 = asJsonString(new User("YassQRAQAE@gmail.com", "Ctr7QAQAQAA", "USER", "Yasuo Wind"));
-		addUser(user1);
-		addUser(user2);
+		addUser(user1AsJson);
+		addUser(user2AsJson);
 	}
 
 	@Test
