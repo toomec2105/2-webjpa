@@ -3,14 +3,18 @@ package com.tomek.web_jpa_2.user;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import com.tomek.web_jpa_2.Application;
 
 @Service
 public class UserService {
 	/*
 	 * @Autowired private UserRepository userRepository;
 	 */
-
+	private static Logger logger = LoggerFactory.getLogger(Application.class);
 	private UserRepository userRepository;
 
 	public UserService(UserRepository userRepository) {
@@ -29,6 +33,7 @@ public class UserService {
 	}
 
 	public List<User> findUsers() {
+		logger.info("----------------------> UserService findAll"); 
 		return userRepository.findAll();
 	}
 

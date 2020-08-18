@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>2-web-jpa</artifactId>
+	<artifactId>2-webjpa</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>2-web-jpa</name>
+	<name>2-webjpa</name>
 	<description>Whole app</description>
 
 	<properties>
