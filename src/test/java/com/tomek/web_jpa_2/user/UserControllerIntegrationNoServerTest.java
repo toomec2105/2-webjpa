@@ -34,13 +34,18 @@ public class UserControllerIntegrationNoServerTest {
 
 	@Autowired
 	private ObjectMapper objectMapper;
-	private User user1 = new User("apKaisa5@gmail.com", "purpleStack", "ADMIN", "Kaisa Stronks");
-	private User user2 = new User("YassQRAQAE@gmail.com", "Ctr7QAQAQAA", "USER", "Yasuo Wind");
-	private String user1AsJson = asJsonString(user1);
-	private String user2AsJson = asJsonString(user2);
+	
+	private User user1;
+	private User user2;
+	private String user1AsJson;
+	private String user2AsJson;
 
 	@BeforeEach
 	public void setup() {
+		user1 = new User("apKaisa5@gmail.com", "purpleStack", "ADMIN", "Kaisa Stronks");
+		user2 = new User("YassQRAQAE@gmail.com", "Ctr7QAQAQAA", "USER", "Yasuo Wind");
+		user1AsJson = asJsonString(user1);
+		 user2AsJson = asJsonString(user2);
 		addUser(user1AsJson);
 		addUser(user2AsJson);
 	}
@@ -51,7 +56,7 @@ public class UserControllerIntegrationNoServerTest {
 		int numbersOfUsersAddedFromFile = 7;
 
 		// act
-		mockMvc.perform(get("/users/all"))
+		mockMvc.perform(get("/users"))
 
 				// assert
 				.andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").exists())
@@ -64,21 +69,23 @@ public class UserControllerIntegrationNoServerTest {
 	public void whenGETall_returnsListOfUsers2() throws Exception {
 
 		// act
-		mockMvc.perform(get("/users/all"))
+		mockMvc.perform(get("/users"))
 
 				// assert
-				.andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").exists());
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").exists());
 	}
 
 	@Test
 	public void givenValidId_whenGETone_returnUser() throws Exception {
 
 		// act
-		MvcResult result1a = mockMvc.perform(get("/users/find/1").characterEncoding("utf-8")).andReturn();
-		MvcResult result2a = mockMvc.perform(get("/users/find/2").characterEncoding("utf-8")).andReturn();
+		MvcResult result1a = mockMvc.perform(get("/users/1").characterEncoding("utf-8")).andReturn();
+		MvcResult result2a = mockMvc.perform(get("/users/2").characterEncoding("utf-8")).andReturn();
 		
-		MvcResult result1b = mockMvc.perform(get("/users/find/1").characterEncoding("utf-8")).andReturn();
-		MvcResult result2b = mockMvc.perform(get("/users/find/2").characterEncoding("utf-8")).andReturn();
+		MvcResult result1b = mockMvc.perform(get("/users/1").characterEncoding("utf-8")).andReturn();
+		MvcResult result2b = mockMvc.perform(get("/users/2").characterEncoding("utf-8")).andReturn();
 		
 		// assert
 		MockHttpServletResponse response1a =  result1a.getResponse();
@@ -114,7 +121,7 @@ public class UserControllerIntegrationNoServerTest {
 
 	private void addUser(String user) {
 		try {
-			mockMvc.perform(post("/users/add").characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON_VALUE)
+			mockMvc.perform(post("/users").characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON_VALUE)
 					.content(user));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

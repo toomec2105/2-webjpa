@@ -26,14 +26,14 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping(path = "/all")
+	@GetMapping(path = "")
 	public List<User> showAllUsers() {
 		logger.info("----------------------> Entering /all");
 		// if list.size()=0 frontend will deal with it
 		return userService.findUsers();
 	}
 
-	@PostMapping("/add")
+	@PostMapping("")
 	public User addUser(@RequestBody User user) {
 		// problem1: what if body is null or empty?
 		// problem2: what if user has non-existant properties?
@@ -42,7 +42,7 @@ public class UserController {
 		return userService.saveUser(user);
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteUser(@PathVariable long id) {
 		//problem1: what if id is not long?  
 		//console: [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException:
@@ -50,14 +50,14 @@ public class UserController {
 		userService.deleteById(id); 
 	}
 
-	@PutMapping("/update")
+	@PutMapping("")
 	public User updateUser(@RequestBody User user) {
 		// problem1: what if body is null or empty?
 		// problem2: what if user has non-existant properties?
 		return userService.updateUser(user);
 	}
 
-	@GetMapping("/find/{id}")
+	@GetMapping("/{id}")
 	public User findUser(@PathVariable long id) {
 		//if(id>0)throw new UserNotFoundException();
 		//problem1: what if id is not long?

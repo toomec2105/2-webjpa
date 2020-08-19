@@ -60,7 +60,7 @@ public class UserControllerUnitTest {
 		
 		//act
 		mockMvc.perform(
-				get("/users/all")
+				get("/users/")
 		)
 		
 		//assert
@@ -81,7 +81,7 @@ public class UserControllerUnitTest {
 			
 		//act
 		mockMvc.perform(
-				get("/users/all")	
+				get("/users")	
 		)
 		
 		//assert
@@ -101,7 +101,7 @@ public class UserControllerUnitTest {
 					
 		//act
 		mockMvc.perform(
-				get("/users/find/2")
+				get("/users/2")
 				.characterEncoding("utf-8") 
 		)
 		
@@ -125,7 +125,7 @@ public class UserControllerUnitTest {
 					
 		//act
 		mockMvc.perform(
-				post("/users/add")
+				post("/users")
 				.characterEncoding("utf-8") 
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(clientUserAsJson)
@@ -150,7 +150,7 @@ public class UserControllerUnitTest {
 					
 		//act
 		mockMvc.perform(
-				put("/users/update")
+				put("/users")
 				.characterEncoding("utf-8") 
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(userAsJson)
@@ -171,7 +171,7 @@ public class UserControllerUnitTest {
 		
 		//act
 		mockMvc.perform(
-				get("/users/find/" + id)
+				get("/users/" + id)
 				.characterEncoding("utf-8") 				
 		)
 		
@@ -190,7 +190,7 @@ public class UserControllerUnitTest {
 					
 		//act
 		mockMvc.perform(
-				delete("/users/delete/" + id)
+				delete("/users/" + id)
 				.characterEncoding("utf-8") 
 		)
 		
@@ -207,7 +207,7 @@ public class UserControllerUnitTest {
 		
 		//act
 		mockMvc.perform(
-				delete("/users/delete/" + id)
+				delete("/users/" + id)
 				.characterEncoding("utf-8") 
 		)
 		
@@ -231,7 +231,7 @@ public class UserControllerUnitTest {
 					
 		//act
 		MvcResult result = mockMvc.perform(
-				post("/users/add")
+				post("/users")
 				.characterEncoding("utf-8") 
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(clientUserAsJson)
@@ -266,7 +266,7 @@ public class UserControllerUnitTest {
 					
 		//act
 		MvcResult result = mockMvc.perform(
-				get("/users/find/2")
+				get("/users/2")
 				.characterEncoding("utf-8") 
 		).andReturn();
 		
