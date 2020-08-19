@@ -43,7 +43,12 @@ public class UserService {
 
 	public void deleteById(Long id) {
 		// if bad id: org.springframework.dao.EmptyResultDataAccessException: 
-		userRepository.deleteById(id);
+		try {
+			userRepository.deleteById(id);
+		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
+			logger.info("----------------------> catching EmptyResultDataAccessException for id: " + id);
+			throw new UserNotFoundException(e.getMessage());
+		}
 	}
 
 	public void deleteAllUsers() {

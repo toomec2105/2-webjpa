@@ -3,9 +3,14 @@ package com.tomek.web_jpa_2.user;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,14 +50,15 @@ public class UserControllerIntegrationNoServerTest {
 		user1 = new User("apKaisa5@gmail.com", "purpleStack", "ADMIN", "Kaisa Stronks");
 		user2 = new User("YassQRAQAE@gmail.com", "Ctr7QAQAQAA", "USER", "Yasuo Wind");
 		user1AsJson = asJsonString(user1);
-		 user2AsJson = asJsonString(user2);
+		user2AsJson = asJsonString(user2);
 		addUser(user1AsJson);
 		addUser(user2AsJson);
 	}
 
 	@Test
 	public void whenGETall_returnsListOfUsers() throws Exception {
-
+		
+		//arrange
 		int numbersOfUsersAddedFromFile = 7;
 
 		// act
@@ -78,7 +84,7 @@ public class UserControllerIntegrationNoServerTest {
 	}
 
 	@Test
-	public void givenValidId_whenGETone_returnUser() throws Exception {
+	public void givenValidId_whenGETone_returnsTheSameUserConsistently() throws Exception {
 
 		// act
 		MvcResult result1a = mockMvc.perform(get("/users/1").characterEncoding("utf-8")).andReturn();
@@ -108,7 +114,104 @@ public class UserControllerIntegrationNoServerTest {
 		assertEquals(savedUser2a, savedUser2b);
 	}
 	
+	@Test
+	public void givenUser_whenPUT_returnsUpdatedUser() throws Exception{
+		//arrange
+		User newUser = new User(1L,"LeaugeOfDraven@gmail.com", "Ctr7QAQAQAA", "USER", "Yasuo Wind");
+		String newUserAsJson = asJsonString(newUser);
+		
+		//act
+		mockMvc.perform(
+				put("/users")
+				.characterEncoding("utf-8") 
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(newUserAsJson)
+		)
+		
+		//assert
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$").exists())
+		.andExpect(content().string(newUserAsJson));
+	}
+	
+	@Test
+	public void givenInvalidId_whenGETone_returns400() throws Exception{
+		//arrange			
+		long id = 132L;
+		
+		//act
+		mockMvc.perform(
+				get("/users/" + id)
+				.characterEncoding("utf-8") 				
+		)
+		
+		//assert
+		.andDo(print())
+		.andExpect(status().is(400))
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void givenValidId_whenDelete_returns200() throws Exception{
+		//arrange			
+		long id = 2L;
+					
+		//act
+		mockMvc.perform(
+				delete("/users/" + id)
+				.characterEncoding("utf-8") 
+		)
+		
+		//assert
+		.andDo(print())
+		.andExpect(status().is(200));
+	}
+	
+	@Test
+	public void givenInvalidId_whenDelete_returns400() throws Exception{
+		//arrange			
+		long id = 132L;
+		
+		//act
+		mockMvc.perform(
+				delete("/users/" + id)
+				.characterEncoding("utf-8") 
+		)
+		
+		//assert
+		.andDo(print())
+		.andExpect(status().is(400))
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void givenValidId_whenGETone_returnsTheSameUserConsistently_2_withMvcResult() throws Exception{
+		
+		//act
+		MvcResult result1 = mockMvc.perform(
+				get("/users/1")
+				.characterEncoding("utf-8") 
+		).andReturn();
+		
+		MvcResult result2 = mockMvc.perform(
+				get("/users/1")
+				.characterEncoding("utf-8") 
+		).andReturn();
+		
+		//assert
+		MockHttpServletResponse response1 =  result1.getResponse();
+		String userAsJsonString1 = response1.getContentAsString();
+		User savedUser1 = objectMapper.readValue(userAsJsonString1, User.class);
+		
+		MockHttpServletResponse response2 =  result2.getResponse();
+		String userAsJsonString2 = response2.getContentAsString();
+		User savedUser2 = objectMapper.readValue(userAsJsonString2, User.class);
 
+		assertEquals(savedUser1, savedUser2);
+		assertEquals(savedUser1.getId(), savedUser2.getId());
+		assertEquals(savedUser1.getPassword(), savedUser2.getPassword());
+	}
 	// ------------------helpers---------------------
 	private String asJsonString(User user) {
 		try {
@@ -116,18 +219,18 @@ public class UserControllerIntegrationNoServerTest {
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException();
 		}
-
 	}
 
 	private void addUser(String user) {
 		try {
-			mockMvc.perform(post("/users").characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON_VALUE)
+			mockMvc.perform(post("/users")
+					.characterEncoding("utf-8")
+					.contentType(MediaType.APPLICATION_JSON_VALUE)
 					.content(user));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(user);
 	}
 
 }

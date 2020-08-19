@@ -1,5 +1,11 @@
 package com.tomek.web_jpa_2.user;
 
-public class UserNotFoundException extends RuntimeException {
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+public class UserNotFoundException extends RuntimeException {
+	public UserNotFoundException (String message) {
+		super(message);
+	}
+	
 }

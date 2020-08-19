@@ -91,7 +91,7 @@ public class UserControllerUnitTest {
 	}
 	
 	@Test
-	public void givenValidId_whenGETone_returnUser() throws Exception{
+	public void givenValidId_whenGETone_returnsTheSameUserConsistently() throws Exception{
 		//arrange
 		User user = new User (2L,"krzychu@onet.pl", "DerekSzmitd", "ADMIN", "Pawelelek Sagt");
 		String userJson = objectMapper.writeValueAsString(user);
@@ -257,7 +257,7 @@ public class UserControllerUnitTest {
 	}
 	
 	@Test
-	public void givenValidId_whenGETone_returnUser_2_withMvcResult() throws Exception{
+	public void givenValidId_whenGETone_returnsTheSameUserConsistently_2_withMvcResult() throws Exception{
 		//arrange
 		User user = new User (2L,"krzychu@onet.pl", "DerekSzmitd", "ADMIN", "Pawelelek Sagt");
 		
