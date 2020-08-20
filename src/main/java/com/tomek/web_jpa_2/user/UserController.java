@@ -34,6 +34,7 @@ public class UserController {
 	}
 
 	@PostMapping("")
+	@ResponseStatus(value= HttpStatus.CREATED) 
 	public User addUser(@RequestBody User user) {
 		// problem1: what if body is null or empty?
 		// problem2: what if user has non-existant properties?
@@ -43,6 +44,7 @@ public class UserController {
 	}
 
 	@DeleteMapping("/{id}")
+	@ResponseStatus(value= HttpStatus.NO_CONTENT) 
 	public void deleteUser(@PathVariable long id) {
 		//problem1: what if id is not long?  
 		//console: [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException:

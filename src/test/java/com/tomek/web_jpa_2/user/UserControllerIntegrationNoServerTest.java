@@ -165,7 +165,7 @@ public class UserControllerIntegrationNoServerTest {
 		
 		//assert
 		.andDo(print())
-		.andExpect(status().is(200));
+		.andExpect(status().isNoContent());
 	}
 	
 	@Test

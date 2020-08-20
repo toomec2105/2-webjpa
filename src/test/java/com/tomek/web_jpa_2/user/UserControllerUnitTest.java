@@ -133,7 +133,7 @@ public class UserControllerUnitTest {
 		
 		//assert
 		.andDo(print())
-		.andExpect(status().isOk())
+		.andExpect(status().isCreated())
 		.andExpect(jsonPath("$").exists())
 		.andExpect(content().string(savedUserAsJson));
 	}
@@ -196,7 +196,7 @@ public class UserControllerUnitTest {
 		
 		//assert
 		.andDo(print())
-		.andExpect(status().is(200));
+		.andExpect(status().isNoContent());
 	}
 	
 	@Test
